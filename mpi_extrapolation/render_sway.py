@@ -60,8 +60,8 @@ image_width = 1024
 # edit based on GPU memory constraints and your image size
 # Recommend using largest patchsize possible
 # and decreasing outsize to reduce tiling artifacts
-patchsize = np.array([576, 384])  # patch size for inference
-outsize = np.array([576, 128])  # central portion of the patch to keep
+patchsize = np.array([288, 128])  # patch size for inference
+outsize = np.array([288, 64])  # central portion of the patch to keep
 
 # Sway path parameters
 num_frames = 128
@@ -238,7 +238,8 @@ def main(argv):
   layers = outs["rgba_layers_refine"]
   for i in range(layers.shape[3]):
     i_filename = FLAGS.output_dir + "mpi_rgba_{:04d}.png".format(i)
-    plt.imsave(i_filename, layers[0, :, :, i, :])
+    data = np.clip(layers[0, :, :, i, :], 0, 1)
+    plt.imsave(i_filename, data)
     print("wrote layer:", i)
 
   # Render example sway camera path
